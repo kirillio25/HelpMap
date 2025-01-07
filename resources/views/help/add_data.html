@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добавление метки по клику</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body {
+      background-color: #212529;
+      color: white;
+    }
+
+    #map {
+      height: 600px;
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      background-color: #495057;
+      color: white;
+      border: 1px solid #6c757d;
+    }
+
+    .card {
+      background-color: #343a40;
+      border-radius: 8px;
+    }
+
+    .btn-dark {
+      background-color: #1d2124;
+      border: none;
+    }
+
+    .btn-dark:hover {
+      background-color: #343a40;
+    }
+
+    h1 {
+      color: #f8f9fa;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container my-5">
+    <div class="card">
+      <div class="card-header text-center">
+        <h3>Добавление метки на карте</h3>
+      </div>
+      <div class="card-body">
+        <h5 class="mb-3">Отметьте своё местоположение на карте:</h5>
+        <div id="map"></div>
+
+        <form id="addDataForm">
+          <!-- ФИО -->
+          <div class="mb-3">
+            <label for="fullName" class="form-label">ФИО</label>
+            <input type="text" class="form-control" id="fullName" placeholder="Введите ФИО" required>
+          </div>
+
+          <!-- Телефон -->
+          <div class="mb-3">
+            <label for="phone" class="form-label">Телефон</label>
+            <input type="tel" class="form-control" id="phone" placeholder="Введите телефон" required>
+          </div>
+
+          <!-- Местоположение -->
+          <div class="mb-3">
+            <label for="location" class="form-label">Местоположение (Широта, Долгота)</label>
+            <input type="text" class="form-control" id="location" placeholder="Местоположение будет обновлено при клике на карту" readonly>
+          </div>
+
+          <button type="submit" class="btn btn-dark w-100">Сохранить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Создаём карту с начальной позицией и масштабом
+    const map = L.map('map').setView([53.2192, 63.6340], 12);
+
+    // Подключаем слой карты OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+    }).addTo(map);
+
+    // Переменная для метки
+    let userMarker;
+
+    // Обработчик клика по карте
+    map.on('click', function (e) {
+      const { lat, lng } = e.latlng; // Получаем координаты клика
+
+      // Если метка уже существует, удаляем её
+      if (userMarker) {
+        map.removeLayer(userMarker);
+      }
+
+      // Добавляем новую метку на карту
+      userMarker = L.marker([lat, lng]).addTo(map).bindPopup(`
+        <b>Ваше местоположение</b><br>
+        N: ${lat.toFixed(6)}, E: ${lng.toFixed(6)}
+      `).openPopup();
+
+      // Обновляем поле местоположения в форме
+      document.getElementById('location').value = `N: ${lat.toFixed(6)}, E: ${lng.toFixed(6)}`;
+    });
+
+    // Обработчик отправки формы
+    document.getElementById('addDataForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Получаем значения из формы
+      const fullName = document.getElementById('fullName').value;
+      const phone = document.getElementById('phone').value;
+      const location = document.getElementById('location').value;
+
+      // Выводим полученные данные
+      console.log('ФИО:', fullName);
+      console.log('Телефон:', phone);
+      console.log('Местоположение:', location);
+
+      // Сообщение об успешном добавлении
+      alert('Данные успешно добавлены!');
+    });
+  </script>
+</body>
+
+</html>
