@@ -1,37 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта с отметкой</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+@extends('layouts.app')
+@section('title', 'Welcome Page')
+
+@push('styles')
     <style>
         #map {
             height: 100vh;
             width: 100%;
         }
     </style>
-</head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+@endpush
+
 <body>
-
-<header data-bs-theme="dark">
-    <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a href="#" class="navbar-brand d-flex align-items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 1 2 0-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                    <circle cx="12" cy="13" r="4"></circle>
-                </svg>
-                <strong>Album</strong>
-            </a>
-
-            <div class="text-end">
-                <a href="#" class="btn btn-warning">
-                    Нужна помощь
-                </a>
-            </div>
-
 {{--            @if (Route::has('login'))--}}
 {{--                <nav class="-mx-3 flex flex-1 justify-end">--}}
 {{--                    @auth--}}
@@ -62,38 +42,34 @@
 {{--            @endif--}}
 
 
-        </div>
-    </div>
-</header>
-
-<main>
+@section('content')
     <div id="map"></div>
-    <p class="text-center">Координаты: <span id="coordinates">Нажмите на карту</span></p>
-</main>
+@endsection
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    const map = L.map('map').setView([55.7558, 37.6173], 10);
+@push('scripts')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Создаём карту с центром в Москве
+        const map = L.map('map').setView([55.7558, 37.6173], 5);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-    }).addTo(map);
+        // Подключаем слой карты OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+        }).addTo(map);
 
-    let userMarker;
+        // Предустановленные метки с координатами
+        const locations = [
+            { coords: [55.7558, 37.6173], popup: "Москва, Россия" },
+            { coords: [59.9343, 30.3351], popup: "Санкт-Петербург, Россия" },
+            { coords: [48.8566, 2.3522], popup: "Париж, Франция" },
+            { coords: [51.5074, -0.1278], popup: "Лондон, Великобритания" },
+            { coords: [40.7128, -74.0060], popup: "Нью-Йорк, США" }
+        ];
 
-    map.on('click', function (e) {
-        const { lat, lng } = e.latlng;
+        // Добавляем метки на карту
+        locations.forEach(location => {
+            L.marker(location.coords).addTo(map).bindPopup(location.popup);
+        });
+    </script>
+@endpush
 
-        if (userMarker) {
-            userMarker.setLatLng([lat, lng]);
-        } else {
-            userMarker = L.marker([lat, lng]).addTo(map);
-        }
-
-        document.getElementById('coordinates').textContent = `Широта: ${lat.toFixed(6)}, Долгота: ${lng.toFixed(6)}`;
-    });
-</script>
-
-</body>
-</html>
