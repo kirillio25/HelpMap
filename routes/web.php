@@ -1,11 +1,14 @@
 <?php
+use App\Models\Point;
 
 use App\Http\Controllers\HelpDashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    // Получаем все точки из базы данных
+    $points = Point::all();
+    return view('welcome', compact('points'));
 });
 
 //Route::get('/dashboard', function () {

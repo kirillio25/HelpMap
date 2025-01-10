@@ -12,35 +12,6 @@
 @endpush
 
 <body>
-{{--            @if (Route::has('login'))--}}
-{{--                <nav class="-mx-3 flex flex-1 justify-end">--}}
-{{--                    @auth--}}
-{{--                        <a--}}
-{{--                            href="{{ url('/dashboard') }}"--}}
-{{--                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"--}}
-{{--                        >--}}
-{{--                            Dashboard--}}
-{{--                        </a>--}}
-{{--                    @else--}}
-{{--                        <a--}}
-{{--                            href="{{ route('login') }}"--}}
-{{--                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"--}}
-{{--                        >--}}
-{{--                            Log in--}}
-{{--                        </a>--}}
-
-{{--                        @if (Route::has('register'))--}}
-{{--                            <a--}}
-{{--                                href="{{ route('register') }}"--}}
-{{--                                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"--}}
-{{--                            >--}}
-{{--                                Register--}}
-{{--                            </a>--}}
-{{--                        @endif--}}
-{{--                    @endauth--}}
-{{--                </nav>--}}
-{{--            @endif--}}
-
 
 @section('content')
     <div id="map"></div>
@@ -57,19 +28,17 @@
             attribution: '© OpenStreetMap contributors',
         }).addTo(map);
 
-        // Предустановленные метки с координатами
-        const locations = [
-            { coords: [55.7558, 37.6173], popup: "Москва, Россия" },
-            { coords: [59.9343, 30.3351], popup: "Санкт-Петербург, Россия" },
-            { coords: [48.8566, 2.3522], popup: "Париж, Франция" },
-            { coords: [51.5074, -0.1278], popup: "Лондон, Великобритания" },
-            { coords: [40.7128, -74.0060], popup: "Нью-Йорк, США" }
-        ];
+        // Массив с точками из Blade-шаблона
+        const locations = @json($points);
 
         // Добавляем метки на карту
         locations.forEach(location => {
-            L.marker(location.coords).addTo(map).bindPopup(location.popup);
+            const coords = JSON.parse(location.location); // Декодируем JSON из базы
+            const popupContent = `ФИО: ${location.fullName}<br>Телефон: ${location.phone}<br>Описание: ${location.description}`;
+
+            L.marker([coords.latitude, coords.longitude]).addTo(map).bindPopup(popupContent);
         });
     </script>
 @endpush
+
 

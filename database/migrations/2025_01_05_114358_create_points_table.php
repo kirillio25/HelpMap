@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('points', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('fullName');
+            $table->string('phone');
             $table->longText('description');
-            $table->json('coordinates');
+            $table->json('location');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
