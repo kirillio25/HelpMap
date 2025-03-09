@@ -108,44 +108,44 @@
             </div>
         </section>
 
-        <div class="album py-5 bg-body-tertiary">
-            <div class="container">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    @foreach($points as $point)
-                        <div class="col">
-                            <div class="card shadow-sm position-relative">
-                                <!-- Иконка корзины для удаления -->
-                                <form action="{{ route('help-dashboard.destroy', $point->id) }}" method="POST" class="position-absolute top-0 end-0 m-2">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите удалить эту метку?');">
-                                        <i class="bi bi-trash"></i> <!-- Иконка корзины (необходимо подключить Bootstrap Icons) -->
-                                    </button>
-                                </form>
+        @if($points->isNotEmpty())
+            <div class="album py-5 bg-body-tertiary">
+                <div class="container">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        @foreach($points as $point)
+                            <div class="col">
+                                <div class="card shadow-sm position-relative">
+                                    <!-- Иконка корзины для удаления -->
+                                    <form action="{{ route('help-dashboard.destroy', $point->id) }}" method="POST" class="position-absolute top-0 end-0 m-2">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите удалить эту метку?');">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
 
-                                <!-- Имя пользователя -->
-                                <div class="card-img-top d-flex align-items-center justify-content-center bg-warning text-white fs-3" style="height: 225px;">
-                                    {{ $point->fullName }}
-                                </div>
+                                    <!-- Имя пользователя -->
+                                    <div class="card-img-top d-flex align-items-center justify-content-center bg-warning text-white fs-3" style="height: 225px;">
+                                        {{ $point->fullName }}
+                                    </div>
 
-
-                                <!-- Описание и кнопки -->
-                                <div class="card-body">
-                                    <p class="card-text">{{ $point->description }}</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            {{-- <a href="{{ route('help-dashboard.show', $point->id) }}" class="btn btn-sm btn-outline-secondary">Посмотреть</a>--}}
-                                            <a href="{{ route('help-dashboard.edit', $point->id) }}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                                    <!-- Описание и кнопки -->
+                                    <div class="card-body">
+                                        <p class="card-text">{{ $point->description }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group">
+                                                <a href="{{ route('help-dashboard.edit', $point->id) }}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                                            </div>
+                                            <small class="text-body-secondary">{{ $point->created_at->format('d.m.Y') }}</small>
                                         </div>
-                                        <small class="text-body-secondary">{{ $point->created_at->format('d.m.Y') }}</small>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
 
     </main>

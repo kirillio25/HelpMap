@@ -8,4 +8,13 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        host: "0.0.0.0", // Чтобы Vite слушал все соединения
+        port: 5173,
+        strictPort: true,
+        hmr: {
+            host: "localhost",
+            protocol: "ws",
+        },
+    }
 });

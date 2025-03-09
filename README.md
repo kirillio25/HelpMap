@@ -1,2 +1,6 @@
 # HelpMap
-Посмотрев на карту - помоги тому кому нужна помощь
+
+cd docker_s/
+docker compose up
+
+http://localhost:92/
