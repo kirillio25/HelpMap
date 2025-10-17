@@ -1,6 +1,6 @@
 <?php
 
-namespace src\tests\Feature\Auth;
+namespace Tests\Feature\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use src\tests\TestCase;

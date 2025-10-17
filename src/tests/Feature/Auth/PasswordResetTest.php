@@ -1,6 +1,7 @@
 <?php
 
-namespace src\tests\Feature\Auth;
+
+namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
